@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelKeys — Ключи к цифровым мирам</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+<link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="favicon-16x16.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="apple-touch-icon.png"
+    />
+    <link rel="manifest" href="site.webmanifest" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #161E2B;
+    --accent1: #ED60F5;
+    --accent2: #00A2FF;
+    --accent3: #893BE9;
+    --text-main: #D4D4D4;
+    --text-sub: #B0B5FF;
+    --text-muted: #7C7C7C;
+    --btn-text: #191E31;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Exo 2', sans-serif;
+    background-color: var(--bg);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG PATTERN */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 70vh;
+    background: url('bg-pattern.png') center top / cover no-repeat;
+    opacity: 0.18;
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(22,30,43,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 90px;
+  }
+
+  .nav-logo img {
+    height: 80px;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .nav-links a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent2); }
+
+  /* ===== HERO CAROUSEL ===== */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-sub);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    background: linear-gradient(180deg, var(--accent2), var(--accent3));
+    border-radius: 2px;
+  }
+
+  .hero-section {
+    padding: 40px 0 0;
+  }
+
+  .carousel-wrapper {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+    position: relative;
+    height: 380px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .carousel-slide img.slide-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .carousel-slide:hover img.slide-bg { transform: scale(1.03); }
+
+  .carousel-slide .slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(22,30,43,0.92) 0%, rgba(22,30,43,0.5) 50%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 40px 48px;
+  }
+
+  .slide-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent2), var(--accent3));
+    color: var(--btn-text);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    width: fit-content;
+  }
+
+  .slide-title {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+
+  .slide-subtitle {
+    font-size: 14px;
+    color: var(--text-sub);
+    margin-bottom: 18px;
+  }
+
+  .slide-price {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, var(--accent2) 0%, var(--accent3) 100%);
+    color: var(--btn-text);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 11px 28px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--text-main);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border-radius: 6px;
+    border: 1.5px solid var(--accent2);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(0,162,255,0.12);
+  }
+
+  /* Carousel controls */
+  .carousel-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 5;
+  }
+
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .carousel-dot.active {
+    background: var(--accent2);
+    width: 22px;
+    border-radius: 4px;
+  }
+
+  .carousel-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: background 0.2s;
+    margin-left: 6px;
+  }
+
+  .carousel-btn:hover { background: rgba(0,162,255,0.3); }
+
+  /* ===== CATALOG GRID ===== */
+  .catalog-section {
+    padding: 48px 0;
+  }
+
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  .game-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .game-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0,162,255,0.35);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  }
+
+  .game-card-img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .game-card:hover .game-card-img { transform: scale(1.05); }
+
+  .game-card-img-wrap {
+    overflow: hidden;
+  }
+
+  .game-card-body {
+    padding: 14px 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .game-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .game-card-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+
+  .game-type-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .badge-key {
+    background: rgba(0,162,255,0.15);
+    color: var(--accent2);
+    border: 1px solid rgba(0,162,255,0.3);
+  }
+
+  .badge-license {
+    background: rgba(237,96,245,0.15);
+    color: var(--accent1);
+    border: 1px solid rgba(237,96,245,0.3);
+  }
+
+  .game-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+  }
+
+  .game-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .game-price sup {
+    font-size: 12px;
+    font-weight: 600;
+    vertical-align: super;
+  }
+
+  .btn-add {
+    font-size: 11px;
+    padding: 8px 14px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,14,22,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: #1C2538;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.25s;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  }
+
+  .modal-overlay.open .modal {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-main);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 1;
+  }
+
+  .modal-close:hover { background: rgba(255,255,255,0.14); }
+
+  .modal-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 14px 14px 0 0;
+    display: block;
+  }
+
+  .modal-body {
+    padding: 24px 28px 28px;
+  }
+
+  .modal-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .modal-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+
+  .modal-desc {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .modal-price-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
+    padding: 14px 16px;
+    background: rgba(0,162,255,0.07);
+    border: 1px solid rgba(0,162,255,0.15);
+    border-radius: 8px;
+  }
+
+  .modal-price {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .modal-price-label {
+    font-size: 12px;
+    color: var(--text-sub);
+  }
+
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-sub);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  .form-input, .form-number {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: var(--text-main);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus, .form-number:focus {
+    border-color: var(--accent2);
+  }
+
+  .qty-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .qty-btn {
+    width: 38px;
+    height: 38px;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: var(--text-main);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .qty-btn:hover { background: rgba(0,162,255,0.15); }
+
+  .qty-display {
+    width: 60px;
+    text-align: center;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: var(--text-main);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 8px 0;
+  }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    margin-bottom: 16px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    margin-top: 16px;
+  }
+
+  .total-label { font-size: 13px; color: var(--text-sub); }
+  .total-price { font-size: 22px; font-weight: 800; color: #fff; }
+
+  .btn-buy {
+    width: 100%;
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  /* Agreement modal */
+  .modal-agreement-body {
+    padding: 28px 28px;
+  }
+
+  .modal-agreement-body h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+
+  .modal-agreement-body p {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .modal-agreement-body h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-top: 18px;
+    margin-bottom: 8px;
+  }
+
+  /* Success modal */
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 18px;
+  }
+
+  .success-body {
+    text-align: center;
+    padding: 36px 28px;
+  }
+
+  .success-body h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .success-body p {
+    font-size: 14px;
+    color: var(--text-sub);
+    line-height: 1.6;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 32px 0 28px;
+    position: relative;
+    z-index: 1;
+    margin-top: 24px;
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .footer-logo img {
+    height: 70px;
+    opacity: 0.55;
+    display: block;
+  }
+
+  .footer-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    text-align: justify;
+    max-width: 580px;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-sub);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent2); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,162,255,0.3); border-radius: 3px; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .games-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-links { align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a class="nav-logo" href="#"><img src="logo.png" alt="PixelKeys" onerror="this.outerHTML='<span style=\'font-size:22px;font-weight:800;background:linear-gradient(90deg,#00A2FF,#ED60F5);-webkit-background-clip:text;-webkit-text-fill-color:transparent\'>PixelKeys</span>'"></a>
+    <ul class="nav-links">
+      <li><a href="#" onclick="openAgreement(); return false;">Соглашение</a></li>
+      <li><a href="https://t.me/pixelkeys_bot" target="_blank">Поддержка</a></li>
+    </ul>
+    <div></div>
+  </div>
+</nav>
+
+<!-- HERO CAROUSEL -->
+<section class="hero-section">
+  <div class="container">
+    <div class="section-title">Популярные товары</div>
+    <div class="carousel-wrapper">
+      <div class="carousel-track" id="carouselTrack">
+
+        <!-- Slide 1 -->
+        <div class="carousel-slide" onclick="openGame(0)">
+          <img class="slide-bg" src="https://cdn.akamai.steamstatic.com/steam/apps/668580/library_hero.jpg" alt="Atomic Heart">
+          <div class="slide-overlay">
+            <span class="slide-badge">Горячее предложение</span>
+            <div class="slide-title">Atomic Heart</div>
+            <div class="slide-subtitle">Atomic Heart + все DLC</div>
+            <div class="slide-price">1 499 ₽</div>
+            <button class="btn-primary">Купить сейчас</button>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-slide" onclick="openGame(4)">
+          <img class="slide-bg" src="https://cdn.akamai.steamstatic.com/steam/apps/1888930/library_hero.jpg" alt="The Last of Us">
+          <div class="slide-overlay">
+            <span class="slide-badge">Хит продаж</span>
+            <div class="slide-title">The Last of Us Part I</div>
+            <div class="slide-subtitle">Ключ Steam</div>
+            <div class="slide-price">2 149 ₽</div>
+            <button class="btn-primary">Купить сейчас</button>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-slide" onclick="openGame(8)">
+          <img class="slide-bg" src="https://cdn.akamai.steamstatic.com/steam/apps/292030/library_hero.jpg" alt="Witcher 3">
+          <div class="slide-overlay">
+            <span class="slide-badge">Классика</span>
+            <div class="slide-title">The Witcher 3</div>
+            <div class="slide-subtitle">Wild Hunt — Ключ Steam</div>
+            <div class="slide-price">799 ₽</div>
+            <button class="btn-primary">Купить сейчас</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="carousel-controls">
+        <div class="carousel-dot active" onclick="goSlide(0)"></div>
+        <div class="carousel-dot" onclick="goSlide(1)"></div>
+        <div class="carousel-dot" onclick="goSlide(2)"></div>
+        <button class="carousel-btn" onclick="prevSlide()">&#8249;</button>
+        <button class="carousel-btn" onclick="nextSlide()">&#8250;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOG -->
+<section class="catalog-section">
+  <div class="container">
+    <div class="section-title">Каталог</div>
+    <div class="games-grid" id="gamesGrid"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="logo-footer.png" alt="PixelKeys" onerror="this.outerHTML='<span style=\'font-size:16px;font-weight:800;opacity:0.5;color:#B0B5FF\'>PixelKeys</span>'">
+      </div>
+      <p class="footer-text">Платформа для продажи цифровых товаров. Торговый агрегатор по оказанию услуг в сфере торговли. Все закупаемые ключи приобретаются у официальных поставщиков. Все названия продуктов, компаний и марок, логотипы и товарные знаки являются собственностью соответствующих владельцев.</p>
+      <div class="footer-links">
+        <a href="#">Главная</a>
+        <a href="#" onclick="openAgreement(); return false;">Соглашение</a>
+        <a href="https://vk.com/pixelkeys" target="_blank">Группа ВК</a>
+        <a href="https://t.me/pixelkeys_bot" target="_blank">Поддержка</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- GAME MODAL -->
+<div class="modal-overlay" id="gameModal" onclick="closeGameModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('gameModal').classList.remove('open')">✕</button>
+    <img class="modal-img" id="modalImg" src="" alt="">
+    <div class="modal-body">
+      <div class="modal-badge-row">
+        <span class="game-type-badge" id="modalBadge"></span>
+      </div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-price-row">
+        <div>
+          <div class="modal-price-label">Цена за 1 ключ</div>
+          <div class="modal-price" id="modalPrice"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Электронная почта</label>
+        <input type="email" class="form-input" id="modalEmail" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Количество ключей</label>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <input class="qty-display" type="text" id="modalQty" value="1" readonly>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+      <div class="total-row">
+        <span class="total-label">Итого к оплате</span>
+        <span class="total-price" id="modalTotal"></span>
+      </div>
+      <button class="btn-primary btn-buy" onclick="handleBuy()">Перейти к оплате</button>
+    </div>
+  </div>
+</div>
+
+<!-- AGREEMENT MODAL -->
+<div class="modal-overlay" id="agreementModal" onclick="closeModal('agreementModal', event)">
+  <div class="modal" style="max-width:640px">
+    <button class="modal-close" onclick="document.getElementById('agreementModal').classList.remove('open')">✕</button>
+    <div class="modal-agreement-body">
+      <h2>Пользовательское соглашение</h2>
+      <p>Настоящее Пользовательское соглашение регулирует условия использования платформы PixelKeys и продажу цифровых ключей активации для программного обеспечения.</p>
+      <h3>1. Общие положения</h3>
+      <p>Платформа PixelKeys является торговым агрегатором, осуществляющим продажу цифровых товаров — ключей активации и лицензий для игровых продуктов. Совершая покупку, вы подтверждаете своё согласие с настоящим соглашением.</p>
+      <h3>2. Условия покупки</h3>
+      <p>После успешной оплаты ключ активации высылается на указанный адрес электронной почты в течение 5 минут. Все ключи приобретаются у официальных поставщиков и дистрибьюторов.</p>
+      <h3>3. Политика возврата</h3>
+      <p>Возврат средств осуществляется только в случае, если предоставленный ключ оказался неработоспособным. Факт использования ключа является основанием для отказа в возврате.</p>
+      <h3>4. Ограничение ответственности</h3>
+      <p>PixelKeys не несёт ответственности за ограничения, наложенные правообладателями программного обеспечения после активации ключа, а также за любые изменения в сервисах третьих сторон (Steam, Epic Games и т.д.).</p>
+      <h3>5. Контактная информация</h3>
+      <p>По всем вопросам вы можете обратиться в службу поддержки через Telegram-бот: @pixelkeys_bot</p>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal" onclick="closeModal('successModal', event)">
+  <div class="modal" style="max-width:400px">
+    <button class="modal-close" onclick="document.getElementById('successModal').classList.remove('open')">✕</button>
+    <div class="success-body">
+      <div class="success-icon">✓</div>
+      <h2>Заказ оформлен!</h2>
+      <p id="successText">Ключ будет отправлен на вашу электронную почту в течение нескольких минут. Проверьте папку «Спам», если письмо не пришло.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const GAMES = [
+  {
+    name: "MINECRAFT ЛИЦЕНЗИЯ",
+    type: "Лицензия",
+    price: 799,
+    img: "minecraft.png",
+    desc: "Официальная лицензия Minecraft Java Edition. Строй, исследуй и выживай в безграничном мире. Постоянный доступ к игре и всем обновлениям."
+  },
+  {
+    name: "NIGHT IN THE WOODS",
+    type: "Ключ",
+    price: 599,
+    img: "nightwoods.png",
+    desc: "Приключенческая игра о студентке-кошке, вернувшейся в родной городок. Исследуй тайны, общайся с персонажами и открывай историю."
+  },
+  {
+    name: "HOLLOW KNIGHT: SILKSONG",
+    type: "Ключ",
+    price: 449,
+    img: "hollowknight.png",
+    desc: "Продолжение культового метроидвания. Играй за Хорнет, исследуй новый мир Фэбл и сражайся с сотнями уникальных врагов."
+  },
+  {
+    name: "STARDEW VALLEY",
+    type: "Ключ",
+    price: 399,
+    img: "stardew.png",
+    desc: "Инди-фермерский симулятор. Выращивай урожай, строй отношения с жителями деревни, исследуй шахты и создавай свою ферму мечты."
+  },
+  {
+    name: "THE ISLE",
+    type: "Ключ",
+    price: 299,
+    img: "https://cdn.akamai.steamstatic.com/steam/apps/376210/library_hero.jpg",
+    desc: "Выживание в открытом мире от лица динозавров. Найди еду, воду, избегай хищников и стань частью экосистемы первобытного мира."
+  },
+  {
+    name: "THE LAST OF US PART I",
+    type: "Ключ",
+    price: 2149,
+    img: "https://cdn.akamai.steamstatic.com/steam/apps/1888930/library_hero.jpg",
+    desc: "Культовое постапокалиптическое приключение. Джоэл и Элли пробираются через опустошённую Америку. Эмоциональная история о выживании и связи."
+  },
+  {
+    name: "LIFE IS STRANGE",
+    type: "Ключ",
+    price: 449,
+    img: "https://cdn.akamai.steamstatic.com/steam/apps/319630/library_hero.jpg",
+    desc: "Эпизодическое приключение о студентке, получившей способность перематывать время. Принимай решения, которые меняют судьбы людей."
+  },
+  {
+    name: "STRAY",
+    type: "Ключ",
+    price: 1499,
+    img: "https://cdn.akamai.steamstatic.com/steam/apps/1332010/library_hero.jpg",
+    desc: "Третий заблудший кот в мире роботов. Исследуй неоновые улочки кибер-города, решай загадки и найди путь домой."
+  },
+  {
+    name: "THE WITCHER 3: WILD HUNT",
+    type: "Ключ",
+    price: 799,
+    img: "https://cdn.akamai.steamstatic.com/steam/apps/292030/library_hero.jpg",
+    desc: "Легендарная RPG в огромном открытом мире. Играй за Геральта из Ривии, охотника на монстров, в поисках дочери по воле судьбы."
+  },
+  {
+    name: "METRO 2033 REDUX",
+    type: "Ключ",
+    price: 499,
+    img: "https://cdn.akamai.steamstatic.com/steam/apps/286690/library_hero.jpg",
+    desc: "Переработанная версия шутера в постапокалиптическом московском метро. Выживи в подземном мире, пронизанном тайнами и мутантами."
+  },
+  {
+    name: "ATOMIC HEART + DLC",
+    type: "Ключ",
+    price: 1499,
+    img: "https://cdn.akamai.steamstatic.com/steam/apps/668580/library_hero.jpg",
+    desc: "Шутер от первого лица в альтернативном советском будущем. Исследуй объект 3826, сражайся с роботами и раскрой тайны секретного предприятия."
+  },
+  {
+    name: "DEAD CELLS",
+    type: "Ключ",
+    price: 649,
+    img: "https://cdn.akamai.steamstatic.com/steam/apps/588650/library_hero.jpg",
+    desc: "Рогалик-метроидвания с процедурно генерируемыми уровнями. Каждое прохождение уникально. Сотни видов оружия и способностей."
+  }
+];
+
+// CAROUSEL
+let currentSlide = 0;
+const totalSlides = 3;
+
+function updateCarousel() {
+  document.getElementById('carouselTrack').style.transform = `translateX(-${currentSlide * 100}%)`;
+  document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === currentSlide);
+  });
+}
+
+function nextSlide() {
+  currentSlide = (currentSlide + 1) % totalSlides;
+  updateCarousel();
+}
+
+function prevSlide() {
+  currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+  updateCarousel();
+}
+
+function goSlide(i) {
+  currentSlide = i;
+  updateCarousel();
+}
+
+setInterval(nextSlide, 5000);
+
+// RENDER GRID
+function renderGrid() {
+  const grid = document.getElementById('gamesGrid');
+  grid.innerHTML = GAMES.map((g, i) => `
+    <div class="game-card" onclick="openGame(${i})">
+      <div class="game-card-img-wrap">
+        <img class="game-card-img" src="${g.img}" alt="${g.name}" loading="lazy">
+      </div>
+      <div class="game-card-body">
+        <div class="game-card-header">
+          <div class="game-card-name">${g.name}</div>
+          <span class="game-type-badge ${g.type === 'Ключ' ? 'badge-key' : 'badge-license'}">${g.type}</span>
+        </div>
+        <div class="game-card-footer">
+          <div class="game-price">${g.price.toLocaleString('ru')} ₽</div>
+          <button class="btn-primary btn-add" onclick="event.stopPropagation(); openGame(${i})">В корзину</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+renderGrid();
+
+// GAME MODAL
+let currentGame = null;
+let currentQty = 1;
+
+function openGame(idx) {
+  const g = GAMES[idx];
+  currentGame = g;
+  currentQty = 1;
+
+  document.getElementById('modalImg').src = g.img;
+  document.getElementById('modalTitle').textContent = g.name;
+  document.getElementById('modalDesc').textContent = g.desc;
+  document.getElementById('modalPrice').textContent = g.price.toLocaleString('ru') + ' ₽';
+  document.getElementById('modalQty').value = 1;
+  document.getElementById('modalEmail').value = '';
+
+  const badge = document.getElementById('modalBadge');
+  badge.textContent = g.type;
+  badge.className = 'game-type-badge ' + (g.type === 'Ключ' ? 'badge-key' : 'badge-license');
+
+  updateTotal();
+  document.getElementById('gameModal').classList.add('open');
+}
+
+function changeQty(delta) {
+  currentQty = Math.max(1, Math.min(10, currentQty + delta));
+  document.getElementById('modalQty').value = currentQty;
+  updateTotal();
+}
+
+function updateTotal() {
+  if (!currentGame) return;
+  document.getElementById('modalTotal').textContent = (currentGame.price * currentQty).toLocaleString('ru') + ' ₽';
+}
+
+function closeGameModal(e) {
+  if (e.target === document.getElementById('gameModal')) {
+    document.getElementById('gameModal').classList.remove('open');
+  }
+}
+
+function handleBuy() {
+  const email = document.getElementById('modalEmail').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('modalEmail').style.borderColor = '#ED60F5';
+    document.getElementById('modalEmail').focus();
+    setTimeout(() => document.getElementById('modalEmail').style.borderColor = '', 1500);
+    return;
+  }
+  document.getElementById('gameModal').classList.remove('open');
+  document.getElementById('successText').textContent = `Ключ${currentQty > 1 ? 'и' : ''} для «${currentGame.name}» (${currentQty} шт.) будут отправлены на ${email} в течение нескольких минут. Проверьте папку «Спам», если письмо не пришло.`;
+  setTimeout(() => document.getElementById('successModal').classList.add('open'), 200);
+}
+
+// AGREEMENT
+function openAgreement() {
+  document.getElementById('agreementModal').classList.add('open');
+}
+
+function closeModal(id, e) {
+  if (e.target === document.getElementById(id)) {
+    document.getElementById(id).classList.remove('open');
+  }
+}
+
+// Close on ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    ['gameModal','agreementModal','successModal'].forEach(id => {
+      document.getElementById(id).classList.remove('open');
+    });
+  }
+});
+</script>
+</body>
+</html>
