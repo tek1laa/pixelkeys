@@ -1090,7 +1090,31 @@ function closeGameModal(e) {
   }
 }
 
-function handleBuy() {
+const C1_GET_URL  = 'https://1cdemo2.i-sys.ru/study_gusamova/hs/orders/ПолучитьДанныеЗаказа';
+// POST — создать новый заказ в 1С (нужен отдельный метод в HTTP-сервисе)
+const C1_POST_URL = 'https://1cdemo2.i-sys.ru/study_gusamova/hs/orders/СоздатьЗаказ';
+ 
+function buildOrderJSON(email, game, qty, pricePerUnit) {
+  // Формируем массив строк табличной части Состав
+  // Каждая строка = один ключ (qty строк при кол-ве > 1)
+  const items = [];
+  for (let i = 0; i < qty; i++) {
+    items.push({
+      game: game.name,   // -> Состав.Игра (ищется по Наименованию в 1С)
+      key:  "",          // 1С сама назначит свободный ключ из справочника Ключи
+      price: pricePerUnit
+    });
+  }
+ 
+  return {
+    client: email,                    // -> ЗаказКлиента.Клиент
+    summa:  pricePerUnit * qty,       // -> ЗаказКлиента.СуммаОплаты
+    status: "Не оплачен",             // -> ЗаказКлиента.СтатусОплаты
+    items:  items                     // -> ЗаказКлиента.Состав (табличная часть)
+  };
+}
+ 
+async function handleBuy() {
   const email = document.getElementById('modalEmail').value.trim();
   if (!email || !email.includes('@')) {
     document.getElementById('modalEmail').style.borderColor = '#ED60F5';
@@ -1098,26 +1122,73 @@ function handleBuy() {
     setTimeout(() => document.getElementById('modalEmail').style.borderColor = '', 1500);
     return;
   }
+ 
+  const orderData = buildOrderJSON(email, currentGame, currentQty, currentGame.price);
+  const jsonStr   = JSON.stringify(orderData, null, 2);
+ 
+  // Показываем JSON-попап (для диплома — наглядно демонстрирует передачу)
+  document.getElementById('jsonPreview').textContent = jsonStr;
+  document.getElementById('jsonEmail').textContent   = email;
+  document.getElementById('jsonGame').textContent    = currentGame.name;
+  document.getElementById('jsonQty').textContent     = currentQty;
+  document.getElementById('jsonSumma').textContent   = (currentGame.price * currentQty).toLocaleString('ru') + ' ₽';
   document.getElementById('gameModal').classList.remove('open');
-  document.getElementById('successText').textContent = `Ключ${currentQty > 1 ? 'и' : ''} для «${currentGame.name}» (${currentQty} шт.) будут отправлены на ${email} в течение нескольких минут. Проверьте папку «Спам», если письмо не пришло.`;
-  setTimeout(() => document.getElementById('successModal').classList.add('open'), 200);
+  setTimeout(() => document.getElementById('jsonModal').classList.add('open'), 150);
+ 
+  // Отправка POST в 1С для создания заказа
+  try {
+    const resp = await fetch(C1_POST_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body:    JSON.stringify(orderData)
+    });
+    if (resp.ok) {
+      const result = await resp.json();
+      console.log('1С ответила:', result);
+    }
+  } catch (e) {
+    // 1С недоступна — для демо это нормально, JSON уже показан
+    console.warn('1С недоступна (демо-режим):', e.message);
+  }
 }
-
+ 
+function closeJsonAndSuccess() {
+  document.getElementById('jsonModal').classList.remove('open');
+  const qty = parseInt(document.getElementById('jsonQty').textContent);
+  const game = document.getElementById('jsonGame').textContent;
+  const email = document.getElementById('jsonEmail').textContent;
+  setTimeout(() => {
+    document.getElementById('successText').textContent =
+      `Заказ на «${game}» (${qty} шт.) передан в систему. Ключ${qty > 1 ? 'и' : ''} будут отправлены на ${email} после подтверждения оплаты.`;
+    document.getElementById('successModal').classList.add('open');
+  }, 200);
+}
+ 
+function copyJSON() {
+  const text = document.getElementById('jsonPreview').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Скопировано ✓';
+    btn.style.color = '#4ade80';
+    setTimeout(() => { btn.textContent = 'Скопировать'; btn.style.color = ''; }, 2000);
+  });
+}
+ 
 // AGREEMENT
 function openAgreement() {
   document.getElementById('agreementModal').classList.add('open');
 }
-
+ 
 function closeModal(id, e) {
   if (e.target === document.getElementById(id)) {
     document.getElementById(id).classList.remove('open');
   }
 }
-
+ 
 // Close on ESC
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    ['gameModal','agreementModal','successModal'].forEach(id => {
+    ['gameModal','agreementModal','successModal','jsonModal'].forEach(id => {
       document.getElementById(id).classList.remove('open');
     });
   }
