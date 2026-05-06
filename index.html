@@ -4,25 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PixelKeys — Ключи к цифровым мирам</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico"/>
-<link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="favicon-16x16.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="apple-touch-icon.png"
-    />
-    <link rel="manifest" href="site.webmanifest" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -85,7 +66,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 90px;
+    height: 100px;
   }
 
   .nav-logo img {
@@ -95,7 +76,7 @@
 
   .nav-links {
     display: flex;
-    gap: 40px;
+    gap: 60px;
     list-style: none;
     position: absolute;
     left: 50%;
@@ -105,7 +86,7 @@
   .nav-links a {
     color: var(--text-main);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -697,7 +678,7 @@
   }
 
   .footer-logo img {
-    height: 70px;
+    height: 60px;
     opacity: 0.55;
     display: block;
   }
@@ -897,6 +878,56 @@
   </div>
 </div>
 
+<!-- JSON MODAL -->
+<div class="modal-overlay" id="jsonModal" onclick="closeModal('jsonModal', event)">
+  <div class="modal" style="max-width:620px">
+    <button class="modal-close" onclick="closeJsonAndSuccess()">✕</button>
+    <div class="modal-body" style="padding-top:28px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+        <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--accent2),var(--accent3));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚙</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:0.04em">Передача заказа в 1С</div>
+          <div style="font-size:12px;color:var(--text-sub);margin-top:2px">HTTP POST → ЗаказКлиента</div>
+        </div>
+      </div>
+
+      <!-- Сводка -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px">
+          <div style="font-size:11px;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px">Клиент</div>
+          <div style="font-size:13px;color:var(--text-main);font-weight:600;word-break:break-all" id="jsonEmail"></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px">
+          <div style="font-size:11px;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px">Игра</div>
+          <div style="font-size:13px;color:var(--text-main);font-weight:600" id="jsonGame"></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px">
+          <div style="font-size:11px;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px">Количество</div>
+          <div style="font-size:13px;color:var(--text-main);font-weight:600" id="jsonQty"></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px">
+          <div style="font-size:11px;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px">Сумма</div>
+          <div style="font-size:13px;color:#fff;font-weight:800" id="jsonSumma"></div>
+        </div>
+      </div>
+
+      <!-- JSON блок -->
+      <div style="margin-bottom:18px">
+        <div style="font-size:11px;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+          <span>JSON-тело запроса (POST)</span>
+          <button onclick="copyJSON()" style="background:rgba(0,162,255,0.12);border:1px solid rgba(0,162,255,0.3);color:var(--accent2);font-family:'Exo 2',sans-serif;font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;letter-spacing:0.04em" id="copyBtn">Скопировать</button>
+        </div>
+        <pre id="jsonPreview" style="background:#0D1320;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px;font-size:12px;line-height:1.6;color:#A8D8FF;overflow-x:auto;white-space:pre-wrap;word-break:break-word;max-height:220px;overflow-y:auto;font-family:'Courier New',monospace"></pre>
+      </div>
+
+      <div style="display:flex;gap:10px">
+        <button class="btn-primary" style="flex:1" onclick="closeJsonAndSuccess()">Подтвердить заказ</button>
+        <button class="btn-secondary" onclick="document.getElementById('jsonModal').classList.remove('open')">Назад</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- SUCCESS MODAL -->
 <div class="modal-overlay" id="successModal" onclick="closeModal('successModal', event)">
   <div class="modal" style="max-width:400px">
@@ -912,84 +943,84 @@
 <script>
 const GAMES = [
   {
-    name: "MINECRAFT ЛИЦЕНЗИЯ",
+    name: "Minecraft",
     type: "Лицензия",
     price: 799,
     img: "minecraft.png",
     desc: "Официальная лицензия Minecraft Java Edition. Строй, исследуй и выживай в безграничном мире. Постоянный доступ к игре и всем обновлениям."
   },
   {
-    name: "NIGHT IN THE WOODS",
+    name: "Night in the Woods",
     type: "Ключ",
     price: 599,
     img: "nightwoods.png",
     desc: "Приключенческая игра о студентке-кошке, вернувшейся в родной городок. Исследуй тайны, общайся с персонажами и открывай историю."
   },
   {
-    name: "HOLLOW KNIGHT: SILKSONG",
+    name: "Hollow Knight: Silksong",
     type: "Ключ",
     price: 449,
     img: "hollowknight.png",
     desc: "Продолжение культового метроидвания. Играй за Хорнет, исследуй новый мир Фэбл и сражайся с сотнями уникальных врагов."
   },
   {
-    name: "STARDEW VALLEY",
+    name: "Stardew Valley",
     type: "Ключ",
     price: 399,
     img: "stardew.png",
     desc: "Инди-фермерский симулятор. Выращивай урожай, строй отношения с жителями деревни, исследуй шахты и создавай свою ферму мечты."
   },
   {
-    name: "THE ISLE",
+    name: "The Isle",
     type: "Ключ",
     price: 299,
     img: "https://cdn.akamai.steamstatic.com/steam/apps/376210/library_hero.jpg",
     desc: "Выживание в открытом мире от лица динозавров. Найди еду, воду, избегай хищников и стань частью экосистемы первобытного мира."
   },
   {
-    name: "THE LAST OF US PART I",
+    name: "The Last of Us Part I",
     type: "Ключ",
     price: 2149,
     img: "https://cdn.akamai.steamstatic.com/steam/apps/1888930/library_hero.jpg",
     desc: "Культовое постапокалиптическое приключение. Джоэл и Элли пробираются через опустошённую Америку. Эмоциональная история о выживании и связи."
   },
   {
-    name: "LIFE IS STRANGE",
+    name: "Life Is Strange",
     type: "Ключ",
     price: 449,
     img: "https://cdn.akamai.steamstatic.com/steam/apps/319630/library_hero.jpg",
     desc: "Эпизодическое приключение о студентке, получившей способность перематывать время. Принимай решения, которые меняют судьбы людей."
   },
   {
-    name: "STRAY",
+    name: "Stray",
     type: "Ключ",
     price: 1499,
     img: "https://cdn.akamai.steamstatic.com/steam/apps/1332010/library_hero.jpg",
     desc: "Третий заблудший кот в мире роботов. Исследуй неоновые улочки кибер-города, решай загадки и найди путь домой."
   },
   {
-    name: "THE WITCHER 3: WILD HUNT",
+    name: "The Witcher 3: Wild Hunt",
     type: "Ключ",
     price: 799,
     img: "https://cdn.akamai.steamstatic.com/steam/apps/292030/library_hero.jpg",
     desc: "Легендарная RPG в огромном открытом мире. Играй за Геральта из Ривии, охотника на монстров, в поисках дочери по воле судьбы."
   },
   {
-    name: "METRO 2033 REDUX",
+    name: "Metro 2033 Redux",
     type: "Ключ",
     price: 499,
     img: "https://cdn.akamai.steamstatic.com/steam/apps/286690/library_hero.jpg",
     desc: "Переработанная версия шутера в постапокалиптическом московском метро. Выживи в подземном мире, пронизанном тайнами и мутантами."
   },
   {
-    name: "ATOMIC HEART + DLC",
+    name: "Atomic Heart + DLC",
     type: "Ключ",
     price: 1499,
     img: "https://cdn.akamai.steamstatic.com/steam/apps/668580/library_hero.jpg",
     desc: "Шутер от первого лица в альтернативном советском будущем. Исследуй объект 3826, сражайся с роботами и раскрой тайны секретного предприятия."
   },
   {
-    name: "DEAD CELLS",
+    name: "Dead Cells",
     type: "Ключ",
     price: 649,
     img: "https://cdn.akamai.steamstatic.com/steam/apps/588650/library_hero.jpg",
@@ -1000,31 +1031,31 @@ const GAMES = [
 // CAROUSEL
 let currentSlide = 0;
 const totalSlides = 3;
- 
+
 function updateCarousel() {
   document.getElementById('carouselTrack').style.transform = `translateX(-${currentSlide * 100}%)`;
   document.querySelectorAll('.carousel-dot').forEach((d, i) => {
     d.classList.toggle('active', i === currentSlide);
   });
 }
- 
+
 function nextSlide() {
   currentSlide = (currentSlide + 1) % totalSlides;
   updateCarousel();
 }
- 
+
 function prevSlide() {
   currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
   updateCarousel();
 }
- 
+
 function goSlide(i) {
   currentSlide = i;
   updateCarousel();
 }
- 
+
 setInterval(nextSlide, 5000);
- 
+
 // RENDER GRID
 function renderGrid() {
   const grid = document.getElementById('gamesGrid');
@@ -1046,54 +1077,55 @@ function renderGrid() {
     </div>
   `).join('');
 }
- 
+
 renderGrid();
- 
+
 // GAME MODAL
 let currentGame = null;
 let currentQty = 1;
- 
+
 function openGame(idx) {
   const g = GAMES[idx];
   currentGame = g;
   currentQty = 1;
- 
+
   document.getElementById('modalImg').src = g.img;
   document.getElementById('modalTitle').textContent = g.name;
   document.getElementById('modalDesc').textContent = g.desc;
   document.getElementById('modalPrice').textContent = g.price.toLocaleString('ru') + ' ₽';
   document.getElementById('modalQty').value = 1;
   document.getElementById('modalEmail').value = '';
- 
+
   const badge = document.getElementById('modalBadge');
   badge.textContent = g.type;
   badge.className = 'game-type-badge ' + (g.type === 'Ключ' ? 'badge-key' : 'badge-license');
- 
+
   updateTotal();
   document.getElementById('gameModal').classList.add('open');
 }
- 
+
 function changeQty(delta) {
   currentQty = Math.max(1, Math.min(10, currentQty + delta));
   document.getElementById('modalQty').value = currentQty;
   updateTotal();
 }
- 
+
 function updateTotal() {
   if (!currentGame) return;
   document.getElementById('modalTotal').textContent = (currentGame.price * currentQty).toLocaleString('ru') + ' ₽';
 }
- 
+
 function closeGameModal(e) {
   if (e.target === document.getElementById('gameModal')) {
     document.getElementById('gameModal').classList.remove('open');
   }
 }
- 
+
 // 1С — GET-запрос с параметрами в URL
 const C1_URL = 'https://1cdemo2.i-sys.ru/study_gusamova/hs/orders/СоздатьЗаказ';
- 
+
 async function handleBuy() {
+  console.log('handleBuy вызвана', currentGame, currentQty);
   const email = document.getElementById('modalEmail').value.trim();
   if (!email || !email.includes('@')) {
     document.getElementById('modalEmail').style.borderColor = '#ED60F5';
@@ -1101,16 +1133,16 @@ async function handleBuy() {
     setTimeout(() => document.getElementById('modalEmail').style.borderColor = '', 1500);
     return;
   }
- 
+
   const params = new URLSearchParams({
     client: email,
     game:   currentGame.name,
     qty:    currentQty,
     price:  currentGame.price
   });
- 
+
   const fullURL = C1_URL + '?' + params.toString();
- 
+
   // Показываем попап с данными запроса
   document.getElementById('jsonPreview').textContent = decodeURIComponent(fullURL);
   document.getElementById('jsonEmail').textContent   = email;
@@ -1119,7 +1151,7 @@ async function handleBuy() {
   document.getElementById('jsonSumma').textContent   = (currentGame.price * currentQty).toLocaleString('ru') + ' ₽';
   document.getElementById('gameModal').classList.remove('open');
   setTimeout(() => document.getElementById('jsonModal').classList.add('open'), 150);
- 
+
   // Отправляем запрос в 1С
   try {
     const resp = await fetch(fullURL);
@@ -1133,7 +1165,7 @@ async function handleBuy() {
     console.warn('1С недоступна (демо):', e.message);
   }
 }
- 
+
 function closeJsonAndSuccess() {
   document.getElementById('jsonModal').classList.remove('open');
   const qty   = parseInt(document.getElementById('jsonQty').textContent);
@@ -1146,7 +1178,7 @@ function closeJsonAndSuccess() {
     document.getElementById('successModal').classList.add('open');
   }, 200);
 }
- 
+
 function copyJSON() {
   const text = document.getElementById('jsonPreview').textContent;
   navigator.clipboard.writeText(text).then(() => {
@@ -1156,18 +1188,18 @@ function copyJSON() {
     setTimeout(() => { btn.textContent = 'Скопировать'; btn.style.color = ''; }, 2000);
   });
 }
- 
+
 // AGREEMENT
 function openAgreement() {
   document.getElementById('agreementModal').classList.add('open');
 }
- 
+
 function closeModal(id, e) {
   if (e.target === document.getElementById(id)) {
     document.getElementById(id).classList.remove('open');
   }
 }
- 
+
 // Close on ESC
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
