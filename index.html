@@ -1000,31 +1000,31 @@ const GAMES = [
 // CAROUSEL
 let currentSlide = 0;
 const totalSlides = 3;
-
+ 
 function updateCarousel() {
   document.getElementById('carouselTrack').style.transform = `translateX(-${currentSlide * 100}%)`;
   document.querySelectorAll('.carousel-dot').forEach((d, i) => {
     d.classList.toggle('active', i === currentSlide);
   });
 }
-
+ 
 function nextSlide() {
   currentSlide = (currentSlide + 1) % totalSlides;
   updateCarousel();
 }
-
+ 
 function prevSlide() {
   currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
   updateCarousel();
 }
-
+ 
 function goSlide(i) {
   currentSlide = i;
   updateCarousel();
 }
-
+ 
 setInterval(nextSlide, 5000);
-
+ 
 // RENDER GRID
 function renderGrid() {
   const grid = document.getElementById('gamesGrid');
@@ -1046,52 +1046,53 @@ function renderGrid() {
     </div>
   `).join('');
 }
-
+ 
 renderGrid();
-
+ 
 // GAME MODAL
 let currentGame = null;
 let currentQty = 1;
-
+ 
 function openGame(idx) {
   const g = GAMES[idx];
   currentGame = g;
   currentQty = 1;
-
+ 
   document.getElementById('modalImg').src = g.img;
   document.getElementById('modalTitle').textContent = g.name;
   document.getElementById('modalDesc').textContent = g.desc;
   document.getElementById('modalPrice').textContent = g.price.toLocaleString('ru') + ' ₽';
   document.getElementById('modalQty').value = 1;
   document.getElementById('modalEmail').value = '';
-
+ 
   const badge = document.getElementById('modalBadge');
   badge.textContent = g.type;
   badge.className = 'game-type-badge ' + (g.type === 'Ключ' ? 'badge-key' : 'badge-license');
-
+ 
   updateTotal();
   document.getElementById('gameModal').classList.add('open');
 }
-
+ 
 function changeQty(delta) {
   currentQty = Math.max(1, Math.min(10, currentQty + delta));
   document.getElementById('modalQty').value = currentQty;
   updateTotal();
 }
-
+ 
 function updateTotal() {
   if (!currentGame) return;
   document.getElementById('modalTotal').textContent = (currentGame.price * currentQty).toLocaleString('ru') + ' ₽';
 }
-
+ 
 function closeGameModal(e) {
   if (e.target === document.getElementById('gameModal')) {
     document.getElementById('gameModal').classList.remove('open');
   }
 }
-
+ 
+// 1С — GET-запрос с параметрами в URL
 const C1_URL = 'https://1cdemo2.i-sys.ru/study_gusamova/hs/orders/СоздатьЗаказ';
-
+ 
 async function handleBuy() {
   const email = document.getElementById('modalEmail').value.trim();
   if (!email || !email.includes('@')) {
@@ -1100,36 +1101,81 @@ async function handleBuy() {
     setTimeout(() => document.getElementById('modalEmail').style.borderColor = '', 1500);
     return;
   }
-
-  // Формируем GET-запрос с параметрами в URL
+ 
   const params = new URLSearchParams({
     client: email,
     game:   currentGame.name,
     qty:    currentQty,
     price:  currentGame.price
   });
-
+ 
   const fullURL = C1_URL + '?' + params.toString();
-
-  // Показываем в попапе
-  document.getElementById('jsonPreview').textContent = fullURL;
-  document.getElementById('jsonEmail').textContent  = email;
-  document.getElementById('jsonGame').textContent   = currentGame.name;
-  document.getElementById('jsonQty').textContent    = currentQty;
-  document.getElementById('jsonSumma').textContent  = (currentGame.price * currentQty).toLocaleString('ru') + ' ₽';
+ 
+  // Показываем попап с данными запроса
+  document.getElementById('jsonPreview').textContent = decodeURIComponent(fullURL);
+  document.getElementById('jsonEmail').textContent   = email;
+  document.getElementById('jsonGame').textContent    = currentGame.name;
+  document.getElementById('jsonQty').textContent     = currentQty;
+  document.getElementById('jsonSumma').textContent   = (currentGame.price * currentQty).toLocaleString('ru') + ' ₽';
   document.getElementById('gameModal').classList.remove('open');
   setTimeout(() => document.getElementById('jsonModal').classList.add('open'), 150);
-
+ 
+  // Отправляем запрос в 1С
   try {
     const resp = await fetch(fullURL);
     if (resp.ok) {
-      const text = await resp.text();
-      console.log('1С ответила:', text);
+      const data = await resp.json();
+      if (data.success) {
+        window._lastOrderCod = data.cod;
+      }
     }
   } catch(e) {
     console.warn('1С недоступна (демо):', e.message);
   }
 }
+ 
+function closeJsonAndSuccess() {
+  document.getElementById('jsonModal').classList.remove('open');
+  const qty   = parseInt(document.getElementById('jsonQty').textContent);
+  const game  = document.getElementById('jsonGame').textContent;
+  const email = document.getElementById('jsonEmail').textContent;
+  const cod   = window._lastOrderCod ? ' Номер заказа: ' + window._lastOrderCod + '.' : '';
+  setTimeout(() => {
+    document.getElementById('successText').textContent =
+      `Заказ на «${game}» (${qty} шт.) передан в систему.${cod} Ключ${qty > 1 ? 'и' : ''} будут отправлены на ${email} после подтверждения оплаты.`;
+    document.getElementById('successModal').classList.add('open');
+  }, 200);
+}
+ 
+function copyJSON() {
+  const text = document.getElementById('jsonPreview').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Скопировано ✓';
+    btn.style.color = '#4ade80';
+    setTimeout(() => { btn.textContent = 'Скопировать'; btn.style.color = ''; }, 2000);
+  });
+}
+ 
+// AGREEMENT
+function openAgreement() {
+  document.getElementById('agreementModal').classList.add('open');
+}
+ 
+function closeModal(id, e) {
+  if (e.target === document.getElementById(id)) {
+    document.getElementById(id).classList.remove('open');
+  }
+}
+ 
+// Close on ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    ['gameModal','agreementModal','successModal','jsonModal'].forEach(id => {
+      document.getElementById(id).classList.remove('open');
+    });
+  }
+});
 </script>
 </body>
 </html>
