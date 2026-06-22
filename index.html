@@ -49,7 +49,6 @@
     overflow-x: hidden;
   }
 
-  /* BG PATTERN */
   body::before {
     content: '';
     position: fixed;
@@ -71,7 +70,6 @@
     z-index: 1;
   }
 
-  /* ===== NAVBAR ===== */
   nav {
     position: sticky;
     top: 0;
@@ -114,7 +112,6 @@
 
   .nav-links a:hover { color: var(--accent2); }
 
-  /* ===== HERO CAROUSEL ===== */
   .section-title {
     font-size: 13px;
     font-weight: 700;
@@ -262,7 +259,6 @@
     background: rgba(0,162,255,0.12);
   }
 
-  /* Carousel controls */
   .carousel-controls {
     position: absolute;
     bottom: 20px;
@@ -306,7 +302,6 @@
 
   .carousel-btn:hover { background: rgba(0,162,255,0.3); }
 
-  /* ===== CATALOG GRID ===== */
   .catalog-section {
     padding: 48px 0;
   }
@@ -418,7 +413,6 @@
     letter-spacing: 0.03em;
   }
 
-  /* ===== MODAL ===== */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -622,7 +616,6 @@
     font-size: 14px;
   }
 
-  /* Agreement modal */
   .modal-agreement-body {
     padding: 28px 28px;
   }
@@ -649,7 +642,6 @@
     margin-bottom: 8px;
   }
 
-  /* Success modal */
   .success-icon {
     width: 64px;
     height: 64px;
@@ -680,7 +672,6 @@
     line-height: 1.6;
   }
 
-  /* ===== FOOTER ===== */
   footer {
     border-top: 1px solid rgba(255,255,255,0.07);
     padding: 32px 0 28px;
@@ -729,12 +720,10 @@
 
   .footer-links a:hover { color: var(--accent2); }
 
-  /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(0,162,255,0.3); border-radius: 3px; }
 
-  /* Responsive */
   @media (max-width: 900px) {
     .games-grid { grid-template-columns: repeat(2, 1fr); }
     .footer-inner { grid-template-columns: 1fr; }
@@ -744,7 +733,7 @@
 </head>
 <body>
 
-<!-- NAV -->
+<!-- НАВИГАЦИЯ -->
 <nav>
   <div class="container">
     <a class="nav-logo" href="#"><img src="logo.png" alt="PixelKeys" onerror="this.outerHTML='<span style=\'font-size:22px;font-weight:800;background:linear-gradient(90deg,#00A2FF,#ED60F5);-webkit-background-clip:text;-webkit-text-fill-color:transparent\'>PixelKeys</span>'"></a>
@@ -756,14 +745,13 @@
   </div>
 </nav>
 
-<!-- HERO CAROUSEL -->
+<!-- КАРУСЕЛЬ -->
 <section class="hero-section">
   <div class="container">
     <div class="section-title">Популярные товары</div>
     <div class="carousel-wrapper">
       <div class="carousel-track" id="carouselTrack">
 
-        <!-- Slide 1 -->
         <div class="carousel-slide" onclick="openGame(10)">
           <img class="slide-bg" src="https://cdn.akamai.steamstatic.com/steam/apps/668580/library_hero.jpg" alt="Atomic Heart">
           <div class="slide-overlay">
@@ -775,7 +763,6 @@
           </div>
         </div>
 
-        <!-- Slide 2 -->
         <div class="carousel-slide" onclick="openGame(5)">
           <img class="slide-bg" src="https://cdn.akamai.steamstatic.com/steam/apps/1888930/library_hero.jpg" alt="The Last of Us">
           <div class="slide-overlay">
@@ -787,7 +774,6 @@
           </div>
         </div>
 
-        <!-- Slide 3 -->
         <div class="carousel-slide" onclick="openGame(8)">
           <img class="slide-bg" src="https://cdn.akamai.steamstatic.com/steam/apps/292030/library_hero.jpg" alt="Witcher 3">
           <div class="slide-overlay">
@@ -820,7 +806,7 @@
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ФУТЕР -->
 <footer>
   <div class="container">
     <div class="footer-inner">
@@ -838,7 +824,7 @@
   </div>
 </footer>
 
-<!-- GAME MODAL -->
+<!-- ИГРЫ -->
 <div class="modal-overlay" id="gameModal" onclick="closeGameModal(event)">
   <div class="modal">
     <button class="modal-close" onclick="document.getElementById('gameModal').classList.remove('open')">✕</button>
@@ -876,7 +862,7 @@
   </div>
 </div>
 
-<!-- AGREEMENT MODAL -->
+<!-- СОГЛАШЕНИЕ -->
 <div class="modal-overlay" id="agreementModal" onclick="closeModal('agreementModal', event)">
   <div class="modal" style="max-width:640px">
     <button class="modal-close" onclick="document.getElementById('agreementModal').classList.remove('open')">✕</button>
@@ -897,7 +883,7 @@
   </div>
 </div>
 
-<!-- JSON MODAL -->
+<!-- JSON -->
 <div class="modal-overlay" id="jsonModal" onclick="closeModal('jsonModal', event)">
   <div class="modal" style="max-width:620px">
     <button class="modal-close" onclick="closeJsonAndSuccess()">✕</button>
@@ -910,7 +896,7 @@
         </div>
       </div>
 
-      <!-- Сводка -->
+      <!-- отчет -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
         <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px">
           <div style="font-size:11px;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px">Клиент</div>
@@ -947,7 +933,7 @@
   </div>
 </div>
 
-<!-- SUCCESS MODAL -->
+<!-- успех -->
 <div class="modal-overlay" id="successModal" onclick="closeModal('successModal', event)">
   <div class="modal" style="max-width:400px">
     <button class="modal-close" onclick="document.getElementById('successModal').classList.remove('open')">✕</button>
@@ -1047,7 +1033,6 @@ const GAMES = [
   }
 ];
 
-// CAROUSEL
 let currentSlide = 0;
 const totalSlides = 3;
 
@@ -1075,7 +1060,6 @@ function goSlide(i) {
 
 setInterval(nextSlide, 5000);
 
-// RENDER GRID
 function renderGrid() {
   const grid = document.getElementById('gamesGrid');
   grid.innerHTML = GAMES.map((g, i) => `
@@ -1099,7 +1083,6 @@ function renderGrid() {
 
 renderGrid();
 
-// GAME MODAL
 let currentGame = null;
 let currentQty = 1;
 
@@ -1140,8 +1123,7 @@ function closeGameModal(e) {
   }
 }
 
-// 1С — GET-запрос с параметрами в URL
-const C1_URL = 'https://1cdemo2.i-sys.ru/study_gusamova/hs/orders/СоздатьЗаказ';
+const C1_URL = 'http://192.168.1.33/base/ru_RU/hs/orders/СоздатьЗаказ';
 
 async function handleBuy() {
   console.log('handleBuy вызвана', currentGame, currentQty);
@@ -1162,7 +1144,6 @@ async function handleBuy() {
 
   const fullURL = C1_URL + '?' + params.toString();
 
-  // Показываем попап с данными запроса
   document.getElementById('jsonPreview').textContent = decodeURIComponent(fullURL);
   document.getElementById('jsonEmail').textContent   = email;
   document.getElementById('jsonGame').textContent    = currentGame.name;
@@ -1171,7 +1152,6 @@ async function handleBuy() {
   document.getElementById('gameModal').classList.remove('open');
   setTimeout(() => document.getElementById('jsonModal').classList.add('open'), 150);
 
-  // Отправляем запрос в 1С
   try {
     const resp = await fetch(fullURL);
     if (resp.ok) {
@@ -1208,7 +1188,6 @@ function copyJSON() {
   });
 }
 
-// AGREEMENT
 function openAgreement() {
   document.getElementById('agreementModal').classList.add('open');
 }
@@ -1219,7 +1198,6 @@ function closeModal(id, e) {
   }
 }
 
-// Close on ESC
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     ['gameModal','agreementModal','successModal','jsonModal'].forEach(id => {
